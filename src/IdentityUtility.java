@@ -15,4 +15,8 @@ public class IdentityUtility {
     public boolean isPaymentMiddlewareEnabled() {
         return _isPaymentMiddlewareEnabled;
     }
+
+    public boolean isEVMWithPaymentMiddleware() {
+        return isEMVEnabled() && isPaymentMiddlewareEnabled();
+    }
 }

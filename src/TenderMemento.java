@@ -161,12 +161,20 @@ public class TenderMemento {
         return _memento.get(TenderConstants.APPLICATION_LABEL) != null;
     }
 
+    public boolean hasNonZeroApplicationLabel() {
+        return hasApplicationLabel() && !getApplicationLabel().equals("0");
+    }
+
     public String getApplicationLabel() {
         return (String)_memento.get(TenderConstants.APPLICATION_LABEL);
     }
 
     public boolean hasAID() {
         return _memento.get(TenderConstants.AID) != null;
+    }
+
+    public boolean hasNonZeroAID() {
+        return hasAID() && !getAID().equals("0");
     }
 
     public String getAID() {
@@ -181,8 +189,21 @@ public class TenderMemento {
         return (Integer)_memento.get(TenderConstants.TRANSACTION_TYPE);
     }
 
+    public boolean hasTransactionTypeNotReturnOrVoid() {
+        if (!hasTransactionType()) {
+            return false;
+        }
+        Integer transactionType = getTransactionType();
+        return !transactionType.equals(TenderConstants.TYPE_RETURN) &&
+                !transactionType.equals(TenderConstants.TYPE_VOID);
+    }
+
     public boolean hasTVR() {
         return _memento.get(TenderConstants.TVR) != null;
+    }
+
+    public boolean hasNonZeroTVR() {
+        return hasTVR() && !"0".equals(getTVR());
     }
 
     public String getTVR() {
@@ -193,7 +214,12 @@ public class TenderMemento {
         return _memento.get(TenderConstants.TSI) != null;
     }
 
+    public boolean hasNonZeroTSI() {
+        return hasTSI() && !"0".equals(getTSI());
+    }
+
     public String getTSI() {
         return (String)_memento.get(TenderConstants.TSI);
     }
+
 }

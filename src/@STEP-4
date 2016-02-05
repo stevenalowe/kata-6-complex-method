@@ -1,0 +1,47 @@
+Welcome to Step 4!
+
+That wasn't much fun either, was it? But now almost every if-condition has a single conditional term, and the conditional-reporting pattern of the code is becoming much more obvious.
+
+Let's tackle the output next. It looks like every line of output is a label+value pair in a specific format. It also looks like all such outputs are guarded against null/empty output.
+
+So in theory we could extract each distinct output line into its own function (in the same class). Not one generic helper function for all outputs (or not just that, if you want a base generic output helper function that's fine), but one domain-specific function for each distinct output item.
+
+For example,
+    if (tenderMemento.hasPrepaidCardBalance()) {
+        sb.append(Util.EOL).append("  Available. Balance: ").append(tenderMemento.getPrepaidCardBalance());
+    }
+is replaced with
+    outputPrepaidCardBalance();
+and we add a new method like so
+    protected void outputPrepaidCardBalance() {
+        if (tenderMemento.hasPrepaidCardBalance()) {
+            sb.append(Util.EOL).append("  Available. Balance: ").append(tenderMemento.getPrepaidCardBalance());
+        }
+    }
+
+But wait, that won't work! We'd have to pass tenderMemento and sb into the helper method in order for it to work, wouldn't we?
+
+Ordinarily yes, but passing the same arguments around to a lot of little helper methods is still going to be cluttered and hard to read. So first we're going to promote our method into a method object, by moving all of its parameters into a new host object. In a more complex refactoring, we probably would have extracted a method object in the first step, but it was not obvious why that would be useful when we first started. But now we have to extract a method object in order to hold method parameters safely. If we don't all of our helper functions will have to take the same 2-3 parameters, and that's unnecessary noise.
+
+This is pretty simple: just create a new class, give it a constructor that takes all of the original method's parameters, and expose a no-arg method to do the actual processing. The constructor can set up all of the object's internal state, including derived and wrapped parameters.
+
+If this is slightly confusing, it's because words are less clear than code. I won't give away the result by showing you the method object class, but I will give a hint by showing you what the original method will look like when you're done with this refactoring step:
+    public class FormatInfo {
+        public void formatAuthorizationInfo(Journal journal, TenderAction action,
+                IdentityUtility identityUtility, StringBuffer sb) {
+
+            //if the transaction is not authorized, do nothing
+            if (!journal.isAuthorized()) {
+                return;
+            }
+
+            //create and use a method object
+            FormatInfoMethodObject fimo = new FormatInfoMethodObject(journal, action, identityUtility, sb);
+            fimo.formatAuthorizationInfo();
+
+            //all of the code that was here is now in fimo.formatAuthorizationInfo
+        }
+    }
+
+Hint: when creating your method object, use the original method's parameter and variable names for your method object's field names. Do not bother with getters and setter, and keep everything private or protected. This keeps you from having to change all the variable names after copying in the original method's code.
+
