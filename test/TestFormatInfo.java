@@ -77,4 +77,22 @@ public class TestFormatInfo {
         formatInfo.formatAuthorizationInfo(journal, TenderAction.Success, identityUtility, sb);
         Assert.assertEquals(FULL_OUTPUT, sb.toString());
     }
+
+    private static final String CREDIT_OUTPUT = "\n" +
+            "  Entry: EM\n" +
+            "  Auth. Status: OK";
+
+    @Test
+    public void TestCreditFormatInfo() {
+        Map momento = new HashMap();
+        for (int i=0; i<MOMENTO_FULL_VALUES.length; i+=2) {
+            momento.put(MOMENTO_FULL_VALUES[i], MOMENTO_FULL_VALUES[i+1]);
+        }
+        Journal journal = new Journal(momento, new Tender(TenderType.CREDIT), true);
+        IdentityUtility identityUtility = new IdentityUtility(true, true);
+        FormatInfo formatInfo = new FormatInfo();
+        StringBuffer sb = new StringBuffer();
+        formatInfo.formatAuthorizationInfo(journal, TenderAction.Success, identityUtility, sb);
+        Assert.assertEquals(CREDIT_OUTPUT, sb.toString());
+    }
 }
