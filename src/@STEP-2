@@ -1,0 +1,30 @@
+Welcome to Step 2!
+
+You may have noticed that the output for a credit transaction is only a couple of lines. Does that make sense? Who knows? The people that wrote the code aren't around, but this code has been working for years so we sort of have to trust it. We could spend a great deal of time trying to understand and capture the behavior of this code using test after test after test, but it is pointless. The original method is too complex, too repetitive, too convoluted from years of tiny changes to be thoroughly tested in its present form.
+
+But that doesn't mean we can't easily understand what it is doing, if we can see past the clutter. If you haven't done so recently, skim through the FormatInfo code, what patterns do you notice?
+
+Here are the ones that I notice:
+- the complexity is more apparent than actual; yes, there are a lot of if-else statements in this method, but they're in independent little chunks, each one guarding a piece of potential output
+- some of the if-conditions are a little complicated and repetitive, and they don't read easily as domain statements
+- accessing a generic map using constants and casting is really annoying in an object-oriented language; it adds clutter, and is not particularly type-safe or readable
+- the output from the method is a series of mostly optional appends to a given string buffer
+- in other words, this is a report with a lot of conditional output sections
+- the first condition in the code guards all the rest of the statements
+
+The other thing to notice is that almost all of the output and conditions depends on the values in the memento object. So this method is really a report over a memento object, with some supporting information from the surrounding transaction and environment. What would happen if we just moved this method into the memento class? Wait, we don't have a memento class? It's just a Map? We can fix that!
+
+Next step: create a class to hold a memento object and return strongly-typed values using properly-named fields. For example, instead of
+    if (memento.get(TenderConstants.ENTRY_METHOD) != null && ...)
+We want
+    if (tenderMemento.getEntryMethod() != null && ...)
+where getEntryMethod() returns a String, not an Object.
+
+In fact, we'd go one step further, and push the null comparison into the wrapper class, so instead of
+    if (tenderMemento.getEntryMethod() != null && ...)
+We would have
+    if (tenderMemento.hasEntryMethod() && ...)
+
+Oh, also get rid of the outermost conditional by checking its negation and exiting early. Add another unit test for this case (not authorized).
+
+Hint: it's a good idea to make a lot of small changes, fixing one line at a time and re-running the unit tests. That way if you make a type or accidentally delete the wrong thing, the unit test will fail immediately so you can fix it easily. If you make a lot of changes and then run the unit tests, it may be difficult to figure out which change caused the test to fail.
