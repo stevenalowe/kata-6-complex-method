@@ -41,4 +41,8 @@ public class Journal {
     public boolean isTenderDebit() {
         return _tender.getTenderType() == TenderType.DEBIT;
     }
+
+    public boolean isTenderCreditCheckOrGiftCard() {
+        return isTenderCredit() || isTenderCheck() || isTenderGiftCard();
+    }
 }

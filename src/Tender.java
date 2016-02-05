@@ -9,4 +9,8 @@ public class Tender {
     public TenderType getTenderType() {
         return _tenderType;
     }
+
+    public boolean isCredit() {
+        return _tenderType == TenderType.CREDIT;
+    }
 }
