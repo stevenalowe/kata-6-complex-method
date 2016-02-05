@@ -1,0 +1,23 @@
+Welcome to Step 3!
+
+I know that was not fun. Kind of boring, even. Definitely repetitive. But look at how much easier the code is to read now, and note that we no longer have references to memento constants and casts all over the FormatInfo code - it's all hidden within the TenderMemento class.
+
+Developers - especially those in a hurry - will tend to follow the pattern already established in the code. Now you've replaced a noisy pattern with a good pattern, and all future developers that have to touch this code thank you!
+
+Next step: add helper functions to move complex conditions out of the if-statements. Try to find/create helper function names that are descriptive of the conditions covered. For example:
+    if (identityUtility.isEMVEnabled() && identityUtility.isPaymentMiddlewareEnabled()) { ... }
+becomes
+    if (identityUtility.isEMVWithPaymentMiddleware()) { ... }
+
+Once the conditions are simplified, you may notice a few places in the code where nesting of if-statements is unnecessary. Combine if-conditions in this case, for example
+    if (someCondition()) {
+        if (anotherCondition() && yetAnotherCondition()) {
+            //do something
+        }
+    }
+becomes
+    if (someCondition() && anotherCondition() && yetAnotherCondition()) {
+        //do something
+    }
+
+Remember to make small changes and run unit test frequently!

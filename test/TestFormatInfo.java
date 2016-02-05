@@ -95,4 +95,18 @@ public class TestFormatInfo {
         formatInfo.formatAuthorizationInfo(journal, TenderAction.Success, identityUtility, sb);
         Assert.assertEquals(CREDIT_OUTPUT, sb.toString());
     }
+
+    private static final String NO_OUTPUT = "";
+
+    @Test
+    public void TestNotAuthorized() {
+        Map momento = new HashMap();
+        momento.put(TenderConstants.TRANSACTION_TYPE, TenderConstants.TYPE_SALE);
+        Journal journal = new Journal(momento, new Tender(TenderType.CASH), false);
+        IdentityUtility identityUtility = new IdentityUtility(true, true);
+        FormatInfo formatInfo = new FormatInfo();
+        StringBuffer sb = new StringBuffer();
+        formatInfo.formatAuthorizationInfo(journal, TenderAction.Success, identityUtility, sb);
+        Assert.assertEquals(NO_OUTPUT, sb.toString());
+    }
 }
