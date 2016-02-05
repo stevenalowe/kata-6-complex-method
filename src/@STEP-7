@@ -1,0 +1,16 @@
+Welcome to Step 7!
+
+Adding that last useful unit test didn't take very long, did it?
+
+Some of that was tedious, but look at the result: a simple method with an obvious purpose and an elegant logic flow, adquately covered by unit tests.
+
+We may have been alerted to the original method because of an NPATH complexity warning from Sonar, but that doesn't tell us what's wrong or how to fix it - it only tells us that the method is suspiciously complicated!
+
+It's up to us to decide how to go about fixing such problems. In this case, extracting a method object and a bunch of helpers tamed the complexity to something manageable, allowing us to cover the method with enough unit tests for practical confidence.
+
+
+Our test suite does not provide 100% coverage, but it does covers the main paths well, which is far better than where we started! If you're obsessed with coverage, feel free to write more tests if you like. As for me, I'm happy with this, well done!
+
+Excellent work! The next time you're writing code and you see complexity like this lurking about, take a deep breath, imagine the terrifying place where that road may lead, then refactor to avoid it! ;)
+
+

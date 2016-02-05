@@ -109,4 +109,38 @@ public class TestFormatInfo {
         formatInfo.formatAuthorizationInfo(journal, TenderAction.Success, identityUtility, sb);
         Assert.assertEquals(NO_OUTPUT, sb.toString());
     }
+
+    private static final String DEBIT_OUTPUT = "\n" +
+            "  Entry: EM\n" +
+            "  Auth. Status: OK\n" +
+            "  Auth. Code: GOOD\n" +
+            "  Auth. Response: OK\n" +
+            "  Available. Balance: 123.45\n" +
+            "  Auth. Amt: 123.45\n" +
+            "  Auth. Method: AM1\n" +
+            "  Network: OK\n" +
+            "  Auth. Response Code: OK\n" +
+            "  Name: Test Customer\n" +
+            "  Audit Trace Number: T1\n" +
+            "  Merchant ID: M1\n" +
+            "  Account Type: AT1\n" +
+            "  Terminal ID: TID1\n" +
+            "  Application Label: AL1\n" +
+            "  AID : AID1\n" +
+            "  TVR: TVR1\n" +
+            "  TSI: TSI1";
+
+    @Test
+    public void TestDebitFormatInfo() {
+        Map momento = new HashMap();
+        for (int i=0; i<MOMENTO_FULL_VALUES.length; i+=2) {
+            momento.put(MOMENTO_FULL_VALUES[i], MOMENTO_FULL_VALUES[i+1]);
+        }
+        Journal journal = new Journal(momento, new Tender(TenderType.DEBIT), true);
+        IdentityUtility identityUtility = new IdentityUtility(true, true);
+        FormatInfo formatInfo = new FormatInfo();
+        StringBuffer sb = new StringBuffer();
+        formatInfo.formatAuthorizationInfo(journal, TenderAction.Success, identityUtility, sb);
+        Assert.assertEquals(DEBIT_OUTPUT, sb.toString());
+    }
 }
