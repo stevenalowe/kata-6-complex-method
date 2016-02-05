@@ -1,0 +1,25 @@
+Welcome to the dojo!
+
+In this kata, we will take a frighteningly complex method (NPATH complexity of over 56 million!) and turn it into something much simpler, easier to read and understand, and far easier to test.
+
+But first we must have some unit tests for a safety net. Take a few minutes now and write 56 million unit tests for the original class.
+
+Just kidding!
+
+But seriously, how can we proceed to refactor this complicated method safely?
+
+We have two tools at our disposal:
+- write some unit tests - specifically "characterization tests" in Michael Feathers' terminology, and/or
+- carefully use correctness-preserving transformations
+
+While the latter is always an option, we will be making a lot of small changes to the code; even with refactoring tools, the risk of breaking something is non-zero. Yet the original class is so complex that writing tests with any level of significant coverage is impractical. So we'll go with both options: we'll write a few characterization tests, and use only correctness-preserving transformations (very carefully!).
+
+To create characterization tests, simply set up a few calls in unit tests with asserts on blanks, and let them fail. If you can, try to exercise all or most of the if-blocks' output, but don't go overboard. When you run the tests, they will fail, but the unit testing framework will tell you what the actual output is. We then take that actual output, and, assuming that we trust that it is correct, use that as the answers for our characterization tests.
+
+There are two characterization tests provided as examples:
+ - one for a null transaction. Here we're just creating a minimal set of objects to see what the result is. In this case, the result was null pointer errors until we set the transaction type!
+ - one for a full transaction. Here we're just setting every property and memento value to a string value, to see what happens. In this case, we get a bunch of output, which goes back into out test as the expected result.
+
+No, this is not sufficient coverage, but sufficient coverage in the current code base requires millions of unit tests - and nobody has time for that!
+
+Add another characterization test for a credit transaction (like the second test, but change the TenderType from CASH to CREDIT), and see if the output changes, then proceed to step 2.
