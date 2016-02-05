@@ -1,0 +1,28 @@
+Welcome to Step 6!
+
+With our output helper methods, the main method's logic has become trivial: output a series of things from the memento, if they exist.
+
+Did you notice that there were multiple places that output the Auth Amount? But that they did it different ways? Good! I hope you created different helper methods for each, with distinct, domain-relevant names!
+
+Are we done? Not quite yet!
+
+Now that our main method has a trivial NPATH complexity, let's revisit our unit tests - it should be much easier to get good coverage now. In this case, if our tests cause every possible output line to appear at least once, that's probably good enough.
+
+We could make our helper methods protected, create a subclass of our method object, and test each helper method individually. We could, but it would not add much value, because these methods are trivial - while they may not print right if the underlying memento has invalid values (and we can't fix bad input data here anyway), there's little danger of them printing incorrectly based on input conditions.
+
+In other words, we've dissected the original complex method into a lot of tiny, simple methods, most of which do not merit individual unit testing. We can gain sufficient confidence from covering the paths in the main method - since there's not longer 56 million of them!
+
+So let's do that and then wrap up. Examine the paths through the main method now:
+- we can see that if the journal's transaction is not authorized, it prints nothing - and we already have a test for that (TestNotAuthorized).
+- Next we see that if the transaction was a successful credit using EVM and payment middleware, then it only prints two output lines and stops - and we already have a test for that, too (TestCreditFormatInfo).
+- The remaining conditions are:
+  - isTenderCreditCheckOrGiftCard
+  - isTenderDebit
+  - isEvmWithPaymentMiddleware
+  - hasTransactionTypeNotReturnOrVoid
+
+If we think about this for a moment, we realize that isTenderCreditCheckOrGiftCard and isTenderDebit cannot both be true, because a tender can only be of one type: credit, check, gift card, debit, cash, et al. So we can join the first two if-statements with an else, because they are mutually exclusive. This tells us that we need one test case that's a debit, and another test case that's not a debit. We already have test cases that are not debits, so we need to add a test case for a debit.
+
+The last two conditions, isEvmWithPaymentMiddleware and hasTransactionTypeNotReturnOrVoid are already covered by existing test cases, so we require no new test cases for them.
+
+So we're left with just one more unit test to write: the case where the tender's transaction type is Debit.
