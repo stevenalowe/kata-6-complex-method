@@ -1,0 +1,10 @@
+Welcome to Step 5!
+
+Extracting a method object was pretty simple, right?
+
+Now we can extract domain-level helper methods for each kind of output, without having to pass a bunch of parameters around.
+
+Go ahead and do that now - each distinct output chunk should end up in its own helper method, including its guard conditions. That way, the 'main logic' in the top-level method just becomes a series of calls to helper methods, and its NPATH complexity returns to sane levels.
+
+Note that now you can also extract helper methods for the remaining complex conditionals, the ones that spanned more than one object that we couldn't eliminate earlier. Do that too - when you're done, each if-statement's conditional expression should be a single function call, with an informative, domain-related name.
+
